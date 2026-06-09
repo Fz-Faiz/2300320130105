@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import NotificationCard from "../components/NotificationCard";
 import { getNotifications } from "../notificationService";
+import {Log} from "../../../logging_middleware/logger"
 
 function AllNotifications() {
   const [notifications, setNotifications] = useState([]);
@@ -11,7 +12,19 @@ useEffect(() => {
  
 
   async function loadNotifications() {
+    await Log(
+    "frontend",
+    "info",
+    "api",
+    "Fetching notifications"
+  );
     const data = await getNotifications();
+    await Log(
+      "frontend",
+      "info",
+      "api",
+      "Notifications fetched successfully"
+    );
     console.log(data)
     setNotifications(data.notifications || []);
   }

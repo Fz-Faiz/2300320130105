@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import NotificationCard from "../components/NotificationCard";
 import { getNotifications } from "../notificationService";
 import { getTopNotifications } from "../utils/priority";
+import {Log} from "../../../logging_middleware/logger"
 
 function PriorityNotifications() {
   const [count, setCount] = useState(10);
@@ -13,6 +14,12 @@ function PriorityNotifications() {
   }, [count]);
 
   async function loadNotifications() {
+    await Log(
+      "frontend",
+      "info",
+      "api",
+      "Fetching Notifications"
+    );
     const data = await getNotifications();
 
     const topNotifications =
