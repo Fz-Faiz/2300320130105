@@ -1,45 +1,44 @@
-import { useEffect, useState } from "react";
-import { getNotifications } from "./notificationService";
-import { getTopNotifications } from "./utils/priority";
-import  {Log} from "../../logging_middleware/logger"
+import {
+  Routes,
+  Route,
+  Link,
+} from "react-router-dom";
+
+import AllNotifications from "./pages/AllNotifications";
+import PriorityNotifications from "./pages/PriorityNotifications";
+
 function App() {
-  const [notifications, setNotifications] =
-    useState([]);
-
-  useEffect(() => {
-    async function load() {
-      const data =
-        await getNotifications();
-
-      const top10 =
-        getTopNotifications(
-          data.notifications
-        );
-
-      setNotifications(top10);
-    }
-
-    load();
-  }, []);
-
-  Log(
-      "frontend",
-      "info",
-      "page",
-      "Notifications page loaded"
-    );
-
   return (
     <div>
-      <h1>Top 10 Notifications</h1>
+      <nav
+        style={{
+          padding: "20px",
+          display: "flex",
+          gap: "20px",
+        }}
+      >
+        <Link to="/">
+          All Notifications
+        </Link>
 
-      {notifications.map((n) => (
-        <div key={n.ID}>
-          <h3>{n.Type}</h3>
-          <p>{n.Message}</p>
-          <small>{n.Timestamp}</small>
-        </div>
-      ))}
+        <Link to="/priority">
+          Priority Notifications
+        </Link>
+      </nav>
+
+      <Routes>
+        <Route
+          path="/"
+          element={<AllNotifications />}
+        />
+
+        <Route
+          path="/priority"
+          element={
+            <PriorityNotifications />
+          }
+        />
+      </Routes>
     </div>
   );
 }
